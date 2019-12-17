@@ -19,15 +19,18 @@ generate <- function(x, mode = c("both", "variables", "values"), compact = TRUE)
 }
 
 #' @export
-variable_lbl <- function(x) {
-    lbl_list <- .extract_attr(x, "label")
+variable_lbl <- function(x, type) {
+    type <- if (missing(type)) guess_type(x)
+    lbl_list <- select_extractor(type, "var")(x)
     data.frame(item_name = names(lbl_list), variable_lbl = unlist(lbl_list))
 }
 
+
 # Wobei die Werte da auch noch hin müssen
 #' @export
-value_lbl <- function(x, compact = TRUE) {
-    lbl_list <- .extract_attr(x, "labels")
+value_lbl <- function(x, type, compact = TRUE) {
+    type <- if (missing(type)) guess_type(x)
+    lbl_list <- select_extractor(type, "val")(x)
     lbl_list <- lapply(lbl_list, names)
     if (compact) {
         lbl_list <-  lapply(lbl_list, function(x) paste(x, collapse = ", "))
@@ -38,13 +41,3 @@ value_lbl <- function(x, compact = TRUE) {
     df
 }
 
-.extract_attr <- function(x, a) {
-    stopifnot((a == "label") || (a == "labels"))
-    lapply(x, function(cl) {
-        lbl <- attributes(cl)[[a]]
-        if (is.null(lbl)) {
-            return("")
-        }
-        lbl
-    })
-}
