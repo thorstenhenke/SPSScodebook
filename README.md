@@ -5,7 +5,7 @@ One of the compelling features of SPSS sav data format is the ability to store  
 
 ## Installation
 
-You can install the developement version of SPSScodebook directly from github [CRAN](https://CRAN.R-project.org) with:
+You can install the developement version of SPSScodebook directly from github [GitHub](https://github.com/thorstenhenke/SPSScodebook/) with:
 
 ``` r
 devtools::install_github("https://github.com/thorstenhenke/SPSScodebook")
