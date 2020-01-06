@@ -1,43 +1,50 @@
-# Der codebook uatsch kann auhc mal in ein eigenes paket
-# Am besten auch noch als shiny app
-
-# was gibbet denn noch so alles in den tibbel dingern???
-
 #' @export
-generate <- function(x, mode = c("both", "variables", "values"), compact = TRUE) {
+generate <- function(x, mode = c("both", "variables", "values"), type = guess_type(x), compact = TRUE) {
+    stopifnot(is.data.frame(x))
     m <- match.arg(mode)
-    if (m == "variables") {
-        r <- variable_lbl(x)
-    } else if (m == "values") {
-        r <- value_lbl(x)
-    } else {
-        vr <- variable_lbl(x)
-        vl <- value_lbl(x)
-        r  <- merge(vr, vl, by = "item_name")
+
+    if (m == "variables" || m == "both")
+        var_lbl <- variable_lbl(x, type)
+    if (m == "values" || m == "both")
+        val_lbl <- value_lbl(x, type, compact)
+
+    if (m == "both") {
+        r <- merge(var_lbl, val_lbl, by = "item_name")
     }
+    else {
+        if (!is.null(val_lbl))
+            r <- val_lbl
+        else
+            r <- var_lbl
+    }
+
+    rownames(r) <- NULL
     r
 }
 
 #' @export
-variable_lbl <- function(x, type) {
-    type <- if (missing(type)) guess_type(x)
+variable_lbl <- function(x, type = guess_type(x)) {
+    stopifnot(is.data.frame(x))
     lbl_list <- select_extractor(type, "var")(x)
     data.frame(item_name = names(lbl_list), variable_lbl = unlist(lbl_list))
 }
 
 
-# Wobei die Werte da auch noch hin müssen
 #' @export
-value_lbl <- function(x, type, compact = TRUE) {
-    type <- if (missing(type)) guess_type(x)
+value_lbl <- function(x, type = guess_type(x), compact = TRUE) {
+    stopifnot(is.data.frame(x))
     lbl_list <- select_extractor(type, "val")(x)
-    lbl_list <- lapply(lbl_list, names)
+    lbl_list <- lapply(lbl_list, function(x) {
+        s <- if (has_names(x)) to_string(x, compact = compact) else ""
+    })
+
     if (compact) {
-        lbl_list <-  lapply(lbl_list, function(x) paste(x, collapse = ", "))
-        v <- unlist(lbl_list)
-        names(v) <- names(lbl_list)
-        df <- data.frame(item_name = names(lbl_list), value_lbl = unlist(lbl_list))
-    }  # Spater kann man im else zweig auch noch versuchen da in eine matrix zu bringen.
-    df
+        lbl <- enframe_list(lbl_list, c("item_name", "value_lbl"))
+    } else {
+        val_mat <- matrify_list(lbl_list)
+        lbl <- data.frame(item_name = names(lbl_list), value_lbl = val_mat)
+    }
+
+    lbl
 }
 

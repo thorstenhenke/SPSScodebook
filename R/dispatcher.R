@@ -4,9 +4,7 @@ select_extractor <- function(df_type, v_type) {
 }
 
 guess_type <- function(x) {
-    if ("tbl_df" %in% class(x)) return("haven")
+    if ('tbl_df' %in% class(x)) return("haven")
+    if (has_attribute(x, 'value.labels')) return("foreign")
     return("generic")
 }
-
-
-
