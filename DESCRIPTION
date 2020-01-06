@@ -1,15 +1,20 @@
 Package: SPSScodebook
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Generate a Codebook for a SPSS dataset
+Version: 1.0.0
+Authors@R: person("Thorsten", "Henke", email = "SPSScodebook@thorsten-henke.de", role = c("aut", "cre"))
+Description: One of the compelling features of SPSS sav data format is the ability to store 
+    additional information on the variables and their respective values directly in the SPSS data
+    file. To have access to these information you usually need an SPSS installation, which on the 
+    one hand requires a licence and on the other is an additional program the user has to open. The 
+    To access these information from within  the R environment a collection of lean procedures 
+    is provided that simplyfies the process of variable and value label extraction from a SPSS 
+    data set. Addtionaly the procedures are written in such a way that functionality for new 
+    packages can be added dynamically. 
+Suggests: 
+    haven
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
-Imports: 
-    haven
