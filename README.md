@@ -45,7 +45,7 @@ This package currently suppports datasets that were read in by the foreign packa
 
 2. Add a file called extract_<name-from-return-statment>.R
 
-3. Within this file add two functions: (1) extract_<name-from-return-statment>_var and (2) extract_<name-from-return-statment>_val.
+3. Within this file add two functions: (1) extract\_<name-from-return-statment>\_var and (2) extract\_<name-from-return-statment>\_val.
 
     - extract_<name-from-return-statment>_var should return a named vector, where the vector's names correspond to the variable names and the vector's actual content is the variables' description. 
 
