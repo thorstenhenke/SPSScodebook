@@ -28,7 +28,26 @@ haven_df <- haven::read_spss(p)
 
 Now you can generate a table with the dataset's value variable and value descriptions displayed as a table; like in good old SPSS. Of course this table can later be exportet to excel, csv, etc. 
 
+``` r
+library(SPSScodebook)
+
+haven_tbl <- SPSScodebook::generate(haven_df)
+foreign_raw_tbl <- SPSScodebook::generate(foreign_raw_df)  # Will prompt a warning message
+foreign_lbl_tbl <- SPSScodebook::generate(foreign_lbl_df)
+
+```
+
 # Developement
 
-This package currently suppports datasets that were read in by 
+This package currently suppports datasets that were read in by the foreign package or the haven package. However, other packages can easily be integrated by the following steps: 
+
+1. Edit the guess_type() function in R/dispatcher.R The if clause should contain some kind of fingerprint to uniquely identify your dataset among the other options. The return statment can be freely chosen, although idealy it should be the name of you readin package/routine. 
+
+2. Add a file called extract_<name-from-return-statment>.R
+
+3. Within this file add two functions: (1) extract_<name-from-return-statment>_var and (2) extract_<name-from-return-statment>_val.
+
+    - extract_<name-from-return-statment>_var should return a named vector, where the vector's names correspond to the variable names and the vector's actual content is the variables' description. 
+
+    - extract_<name-from-return-statment>_val should return a named list of named vectors, where the lists's names correspond to the variable names. The named vectors contain the individual value codings and their corresponding labels. The labels should be stored in the names, where the values should be stored in the actual values. 
 
